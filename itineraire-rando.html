@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itinéraire Rando — Été 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pine:#1F3D2E;
+    --pine-dark:#132821;
+    --cream:#F4EFE2;
+    --paper:#FBF8F0;
+    --teal:#35606B;
+    --rust:#A6592C;
+    --gold:#C9971D;
+    --ink:#22261F;
+    --line:#D9D0B8;
+    --easy:#3F7D53;
+    --mod:#3567A6;
+    --hard:#B23A2E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* HERO */
+  .hero{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255,255,255,0.06) 0, transparent 40%),
+      linear-gradient(160deg, var(--pine) 0%, var(--pine-dark) 100%);
+    color:var(--cream);
+    padding:52px 24px 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 34px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 34px);
+    opacity:0.6;
+  }
+  .hero-inner{position:relative; max-width:720px; margin:0 auto;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{content:"◆"; font-size:10px;}
+  .hero h1{
+    font-size:clamp(32px,7vw,48px);
+    line-height:1.05;
+    margin:14px 0 10px;
+  }
+  .hero p.sub{
+    font-size:16px;
+    color:#D8DFCF;
+    max-width:52ch;
+    margin:0 0 28px;
+    line-height:1.5;
+  }
+  .hero-stats{
+    display:flex; flex-wrap:wrap; gap:0;
+    border-top:1px solid rgba(255,255,255,0.18);
+    padding-top:20px;
+  }
+  .hstat{
+    flex:1 1 110px;
+    padding-right:20px;
+  }
+  .hstat .num{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    color:#fff;
+  }
+  .hstat .lbl{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:#AEB99F;
+    margin-top:2px;
+  }
+  .map-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:26px;
+    background:var(--gold);
+    color:var(--pine-dark);
+    font-weight:600;
+    font-size:14px;
+    padding:11px 18px;
+    border-radius:3px;
+    text-decoration:none;
+  }
+  .map-cta:active{transform:translateY(1px);}
+
+  /* TRAIL SPINE / TIMELINE */
+  .trail-wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:36px 20px 80px;
+    position:relative;
+  }
+  .trail-wrap::before{
+    content:"";
+    position:absolute;
+    left:34px; top:8px; bottom:60px;
+    width:2px;
+    background:repeating-linear-gradient(180deg, var(--line) 0 8px, transparent 8px 14px);
+  }
+  .day-section{margin-bottom:0;}
+  .day-head{
+    display:flex; align-items:center; gap:16px;
+    position:relative;
+    padding:26px 0 0;
+  }
+  .blaze{
+    width:44px; height:44px; min-width:44px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:17px;
+    color:#fff;
+    border:3px solid var(--paper);
+    box-shadow:0 0 0 2px currentColor;
+    z-index:2;
+    position:relative;
+  }
+  .blaze.easy{background:var(--easy); color:var(--easy);}
+  .blaze.mod{background:var(--mod); color:var(--mod);}
+  .blaze.hard{background:var(--hard); color:var(--hard);}
+  .blaze.final{background:var(--rust); color:var(--rust);}
+  .blaze span{color:#fff;}
+
+  .day-titles{flex:1;}
+  .day-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+  .day-titles h2{
+    font-size:22px;
+    margin:2px 0 0;
+    color:var(--pine-dark);
+  }
+
+  .cumkm{
+    text-align:right;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:#8A8168;
+    line-height:1.3;
+    white-space:nowrap;
+  }
+  .cumkm b{display:block; font-size:14px; color:var(--rust);}
+
+  .leg{
+    margin:10px 0 0 60px;
+    padding:8px 12px;
+    background:#EFE7D2;
+    border-left:3px solid var(--gold);
+    border-radius:0 4px 4px 0;
+    font-size:13px;
+    color:#5B5340;
+    display:flex; gap:14px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .leg b{color:var(--pine-dark);}
+
+  .card{
+    margin:14px 0 0 60px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .card-photo{
+    width:100%; height:170px;
+    object-fit:cover;
+    display:block;
+    background:#DDD5BC;
+  }
+  .card-photo.placeholder{
+    display:flex; align-items:center; justify-content:center;
+    color:#8A8168; font-size:13px; font-style:italic;
+  }
+  .card-body{padding:16px 18px 18px;}
+  .rando-name{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    color:var(--pine-dark);
+    margin:0 0 6px;
+  }
+  .badges{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;}
+  .badge{
+    font-size:11px; font-weight:600;
+    padding:4px 9px;
+    border-radius:20px;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .badge.diff-easy{background:#E4F0E6; color:var(--easy);}
+  .badge.diff-mod{background:#E3EBF4; color:var(--mod);}
+  .badge.diff-hard{background:#F5E3E0; color:var(--hard);}
+  .badge.meta{background:#EEE8D6; color:#6B6244;}
+
+  .facts{
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:10px 16px;
+    margin:12px 0 14px;
+    padding:12px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .fact-lbl{font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:#8A8168;}
+  .fact-val{font-size:13.5px; color:var(--ink); margin-top:2px; line-height:1.35;}
+
+  .tips{
+    background:#F1ECDC;
+    border-radius:6px;
+    padding:12px 14px;
+    font-size:13px;
+    line-height:1.5;
+    color:#4E4732;
+    margin-bottom:14px;
+  }
+  .tips b{color:var(--pine-dark);}
+
+  .qr-row{
+    display:flex; align-items:center; gap:12px;
+    padding-top:10px;
+  }
+  .qr-row img.qr{
+    width:64px; height:64px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:#fff;
+  }
+  .qr-text{font-size:12px; color:#6B6244; line-height:1.4;}
+  .qr-text a{color:var(--rust); font-weight:600; text-decoration:none;}
+
+  .lodging{
+    margin:12px 0 0 60px;
+    font-size:12.5px;
+    color:#6B6244;
+    display:flex; gap:8px; align-items:baseline;
+  }
+  .lodging b{color:var(--pine-dark);}
+
+  footer{
+    text-align:center;
+    padding:30px 20px 50px;
+    font-size:12px;
+    color:#8A8168;
+    max-width:760px;
+    margin:0 auto;
+  }
+
+  @media(max-width:480px){
+    .trail-wrap::before{left:26px;}
+    .day-head{gap:12px;}
+    .blaze{width:36px; height:36px; font-size:14px; min-width:36px;}
+    .leg, .card, .lodging{margin-left:48px;}
+    .cumkm{font-size:10px;}
+    .facts{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Carnet de route</div>
+    <h1>Des Vosges à l'Hérault</h1>
+    <p class="sub">Départ d'Aulnay-sous-Bois · 10 étapes, 6 massifs, 7 randonnées, une halte en famille à Pézenas, un détour chez Soraya à Alicante, et une arrivée finale à Villanueva de la Concepción.</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="num">7</div><div class="lbl">Randonnées</div></div>
+      <div class="hstat"><div class="num">~2485</div><div class="lbl">Km parcourus</div></div>
+      <div class="hstat"><div class="num">2</div><div class="lbl">Pays (FR + ES)</div></div>
+      <div class="hstat"><div class="num">10</div><div class="lbl">Étapes</div></div>
+    </div>
+    <a class="map-cta" href="https://www.google.com/maps/dir/5+Place+Mercure+Aulnay-sous-Bois/Lac+Noir+Orbey/Parking+du+Mont+des+Ifs+Le+Frasnois/Grand+Port+Aix-les-Bains/Parking+du+Cirque+de+Saint-M%C3%AAme/Pied+du+M%C3%A9lezet+Ceillac/Parking+Mus%C3%A9e+de+la+Pr%C3%A9histoire+Quinson/Parking+la+Presqu%27%C3%AEle+Cassis/P%C3%A9zenas/Alicante+Espagne/Villanueva+de+la+Concepci%C3%B3n+Espagne" target="_blank" rel="noopener">
+      🗺️ Ouvrir l'itinéraire complet dans Google Maps
+    </a>
+  </div>
+</div>
+
+<div class="trail-wrap">
+
+  <!-- DAY 1 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze mod"><span>1</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Jeu. 16 → Sam. 18 juil · Vosges</div>
+        <h2>Plainfaing</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>0 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AG9NLjB-jACsZLvUOroVwXXk2q7yxNl0VOxjkehjpoMSVcBT70860O3VyD-iovBpE2vHNgkOkOG6NuaoBY1dviK_VwODOFivakHek72B104H7WgTN2mzHGgqGQ4GsJmrL1sqZq2Atf_xoURCQiUGw2OsusAXNA=s4800-w800-h600" alt="Lac Noir, Vosges">
+      <div class="card-body">
+        <h3 class="rando-name">Circuit des 3 Lacs — Lac Noir, Lac Blanc, Lac du Forlet</h3>
+        <div class="badges">
+          <span class="badge diff-mod">⭐⭐⭐ Modéré à difficile</span>
+          <span class="badge meta">🥾 Terrain racineux &amp; rocheux</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">≈ 12 km</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">4h30 – 5h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">≈ 450 m D+</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">Parking du Lac Noir, D48.3, 68370 Orbey</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> chaussures de randonnée obligatoires (racines + pierriers). Prévoir 1,5 L d'eau et pique-nique — la ferme-auberge du Forlet ravitaille mais vérifiez ses horaires. Meilleure période : mai à octobre. Site très fréquenté le week-end, partez tôt.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D6760755778292968509">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=6760755778292968509" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Plainfaing (252 route de Saint-Dié) · Hôte : Jean Paul</div>
+  </div>
+
+  <!-- LEG 1-2 -->
+  <div class="leg">🚗 <b>Orbey → Le Frasnois</b> · ≈ 230 km · ≈ 3h00 de route</div>
+
+  <!-- DAY 2 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze easy"><span>2</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Sam. 18 → Dim. 19 juil · Jura</div>
+        <h2>Pont-de-Poitte</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>230 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AJRVUZPdpONR0JCQF3nGxVJYU11mZ1jq6KhcA1rP2e8wQRpY6f8S6hhTubu8VKd2EXCG2VDChk8pXxURk4FsSNtj1h5_hMn4LPyvS8M8RA2GkAwBvvZlPjre1ij4fKit7VH_BmfEJDaIzFbPYHUOKswQizvWow=s4800-w800-h600" alt="Parking du Mont des Ifs, Jura">
+      <div class="card-body">
+        <h3 class="rando-name">Tour des 4 Lacs — Ilay, Narlay, Petit &amp; Grand Maclu</h3>
+        <div class="badges">
+          <span class="badge diff-easy">⭐⭐ Facile à modéré</span>
+          <span class="badge meta">🌲 "Petite Écosse" du Jura</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">≈ 12–15 km (version 3 lacs plus courte possible)</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">3h40 – 5h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">≈ 300–400 m D+</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">Parking du Mont des Ifs, D75, 39130 Le Frasnois</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> zone de quiétude du 15 avril au 15 septembre — restez sur les sentiers balisés. Baignade possible au Petit Maclu (plage nord). Pique-nique idéal au bord du lac d'Ilay. Prudence à la traversée de la D75.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D675253845004899498">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=675253845004899498" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Pont-de-Poitte (10 Rue des Cités) · Hôte : Yves</div>
+  </div>
+
+  <!-- LEG 2-3 -->
+  <div class="leg">🚗 <b>Le Frasnois → Aix-les-Bains</b> · ≈ 115 km · ≈ 1h30 de route</div>
+
+  <!-- DAY 3 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze easy"><span>3</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Dim. 19 → Mar. 21 juil · Savoie</div>
+        <h2>Saint-Genix-les-Villages</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>345 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AG9NLjDRqVfA4qLux5GFbKe7rU6ze2ELDhijE-zPXiZ_3YUEPyCnj4ADpjKZp58cCp9B2RgDr4TjcE8wnCW67jyjda-1sYrqeOFWEdR6zUYdSNd0S9g2CceNu5XkgErRuuXjGQYe6OCoDwMWvdv1Cm2f7GsaiQ=s4800-w800-h600" alt="Grand Port, Lac du Bourget, Aix-les-Bains">
+      <div class="card-body">
+        <h3 class="rando-name">Balade au bord du Lac du Bourget</h3>
+        <div class="badges">
+          <span class="badge diff-easy">⭐ Facile</span>
+          <span class="badge meta">🚴 Plusieurs variantes possibles</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">5–11 km selon variante</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">2h – 3h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">Quasi nul (variante sportive : jusqu'à 900 m)</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">Grand Port, Bd du Lac, 73100 Aix-les-Bains</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> parking gratuit sauf en été (haute saison chargée, venir tôt). Baignade possible, restaurants et glaciers au bord de l'eau. Pour plus de dénivelé, monter au Molard Noir ou à la Dent du Chat.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D10274922255188826188">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=10274922255188826188" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Saint-Genix-les-Villages (185 Chemin de la Tour) · Hôte : Orphée · <span class="mono">2 nuits</span></div>
+  </div>
+
+  <!-- LEG 3-4 -->
+  <div class="leg">🚗 <b>Aix-les-Bains → Saint-Pierre-d'Entremont</b> · ≈ 55 km · ≈ 1h00 de route</div>
+
+  <!-- DAY 4 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze mod"><span>4</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Mar. 21 juil · Chartreuse / Belledonne</div>
+        <h2>Cirque de Saint-Même</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>400 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AJRVUZNwbqHQ3r83q3vno9BsCWsfYv79CwLsVmLslDSJw8sDXdC4cKHfZCcOP_VPjQwRhpkesV8w37M3rIj4g6BAXRKolsFhC-FrSsEcHrHg-Zu1A_A7Ku6mjPBOjV3WK_YDlyS9-08EIWKHj3UeFw=s4800-w800-h600" alt="Cirque de Saint-Même">
+      <div class="card-body">
+        <h3 class="rando-name">Cascades du Cirque de Saint-Même</h3>
+        <div class="badges">
+          <span class="badge diff-mod">⭐⭐ Intermédiaire</span>
+          <span class="badge meta">💦 4 cascades successives</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">≈ 3 km (sentier des cascades)</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">1h30 – 2h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">≈ 440 m D+</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">D45C, 73670 Saint-Pierre-d'Entremont</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> parking payant en juillet-août et week-ends (3,50€) — arrivez avant 9h ou garez-vous au village. Sentiers humides et glissants près des cascades, bonnes chaussures recommandées. Pique-nique possible dans la prairie du cirque, baignade des pieds dans le Guiers.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D11078342461532439139">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=11078342461532439139" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <span class="mono">Retour au logement de Saint-Genix-les-Villages pour la nuit</span></div>
+  </div>
+
+  <!-- LEG 4-5 -->
+  <div class="leg">🚗 <b>Saint-Pierre-d'Entremont → Ceillac</b> · ≈ 210 km · ≈ 3h30 de route</div>
+
+  <!-- DAY 5 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze hard"><span>5</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Mar. 21 → Mer. 22 juil · Queyras</div>
+        <h2>Molines-en-Queyras</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>610 km</b></div>
+    </div>
+    <div class="card">
+      <div class="card-photo placeholder">📷 Photo bientôt disponible</div>
+      <div class="card-body">
+        <h3 class="rando-name">Lac Miroir + Lac Sainte-Anne, depuis Ceillac</h3>
+        <div class="badges">
+          <span class="badge diff-hard">⭐⭐⭐⭐ Modéré à difficile</span>
+          <span class="badge meta">🏔️ Point culminant : 2415 m</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">≈ 13 km</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">4h – 5h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">≈ 770–830 m D+</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">Pied du Mélezet, 05600 Ceillac</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> montée soutenue dès le départ — bâtons utiles. Partez tôt (avant 8h) pour l'effet miroir sur le lac avant que le vent ne se lève. Prévoir 2 L d'eau, casse-croûte pour une pause à la chapelle Sainte-Anne. Parking assez petit, arrivez tôt en haute saison.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3DPied%2Bdu%2BM%25C3%25A9lezet%2C%2BCeillac">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://www.google.com/maps/search/?api=1&query=Pied+du+M%C3%A9lezet%2C+Ceillac" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Molines-en-Queyras (Clôt la Chalpe) · Hôte : Carole</div>
+  </div>
+
+  <!-- LEG 5-6 -->
+  <div class="leg">🚗 <b>Ceillac → Quinson</b> · ≈ 165 km · ≈ 2h45 de route</div>
+
+  <!-- DAY 6 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze easy"><span>6</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Mer. 22 → Ven. 24 juil · Verdon</div>
+        <h2>Lurs</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>775 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AG9NLjBzOTTf5NfUc_907SxdqrUvObxMn4ojUzYaDfUxDw38YIc1ekBs-LoQMttqbop3200cyyUfaxSwWstFKDTHaVlqCf6-p-n8wAyq1B1CbPDzgpU6nQ4__WLBuNkhm2elZRwbuDulEYtsYDdniw=s4800-w800-h600" alt="Basses Gorges du Verdon, Quinson">
+      <div class="card-body">
+        <h3 class="rando-name">Basses Gorges du Verdon — Sentier du Garde Canal</h3>
+        <div class="badges">
+          <span class="badge diff-easy">⭐⭐ Facile à modéré</span>
+          <span class="badge meta">🚇 Tunnel de 120 m</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">≈ 10–11 km (boucle complète)</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">3h – 4h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">≈ 250–370 m D+</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">Parking du Musée de la Préhistoire, 04500 Quinson</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> passages en corniche avec garde-corps — déconseillé aux personnes sujettes au vertige. Tunnel court (lampe de téléphone suffit). Beaucoup d'ombre le matin ; le plateau du retour est en plein soleil, prévoir chapeau + eau. Baignade interdite dans les gorges.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D9174456591963019817">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=9174456591963019817" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Lurs (1288 route de Peyruis) · Hôte : Maguy</div>
+  </div>
+
+  <!-- LEG 6-7 -->
+  <div class="leg">🚗 <b>Quinson → Cassis</b> · ≈ 95 km · ≈ 1h30 de route</div>
+
+  <!-- DAY 7 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze hard"><span>7</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Ven. 24 → Mer. 29 juil · Méditerranée</div>
+        <h2>Marseille (Youcamp Village)</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>870 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AG9NLjAUG9wBHdWp5EgTi0yKqNoxhiTJC_YagbszEfKe-90gNPjkcmNjZMsTAG_fpkZPpqZhPo6DJPOxlEiZbSN3Z0hXwprzj328aYla0iAW7atIG6paTu4bTtl9igy6kk5BrJ6fle0tGam1JZ6j=s4800-w800-h600" alt="Parking Presqu'île, Cassis">
+      <div class="card-body">
+        <h3 class="rando-name">Boucle des 3 Calanques — Port-Miou, Port-Pin, En-Vau</h3>
+        <div class="badges">
+          <span class="badge diff-hard">⭐⭐⭐⭐ Difficile</span>
+          <span class="badge meta">🏖️ Baignade à En-Vau</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Distance</div><div class="fact-val">≈ 8 km aller-retour</div></div>
+          <div><div class="fact-lbl">Durée</div><div class="fact-val">3h – 4h</div></div>
+          <div><div class="fact-lbl">Dénivelé</div><div class="fact-val">≈ 300–400 m D+</div></div>
+          <div><div class="fact-lbl">Parking</div><div class="fact-val">Parking la Presqu'île, 7 Av. Plage Bleue, 13260 Cassis</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> chaleur intense en été — partez au lever du jour. Chaussures fermées indispensables (roches glissantes). Parking payant (~10€/jour, souvent en espèces uniquement). Prévoir maillot de bain pour En-Vau et beaucoup d'eau, peu d'ombre sur le sentier.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D6515200260299868780">
+          <div class="qr-text">Scanner pour ouvrir le parking<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=6515200260299868780" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Youcamp Village, Marseille (Ecolodge Safari) · <span class="mono">5 nuits</span></div>
+  </div>
+
+  <!-- LEG 7-8 -->
+  <div class="leg">🚗 <b>Marseille → Pézenas</b> · ≈ 175 km · ≈ 2h00 de route</div>
+
+  <!-- DAY 8 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze mod"><span>8</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Mer. 29 juil · Hérault</div>
+        <h2>Pézenas — Étape famille</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>1045 km</b></div>
+    </div>
+    <div class="card">
+      <img class="card-photo" src="https://lh3.googleusercontent.com/place-photos/AJRVUZM6TYpsbUOIGkSpI0jnNb87QbzHN84bAuqOLfbERH8KiHBV2i-qyM-9lEdnx89UqovpQLqpi0N-wyNJMp-eVEY8cXivV_FF6qUTlfE-6bu4bAxuVm2ClbwE1lkhbdZY4xXoEl8zkH5P0NJe7Q=s4800-w800-h600" alt="Pézenas, Hérault">
+      <div class="card-body">
+        <h3 class="rando-name">Halte chez les grands-parents</h3>
+        <div class="badges">
+          <span class="badge meta">👨‍👩‍👧 Étape famille</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Adresse</div><div class="fact-val">Rue Albert Camus, 34120 Pézenas</div></div>
+          <div><div class="fact-lbl">Chez</div><div class="fact-val">Grands-parents</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> pas de rando prévue — profitez du centre historique de Pézenas (ville de Molière) en fin de journée si l'énergie le permet !</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fmaps.google.com%2F%3Fcid%3D8858847037758294459">
+          <div class="qr-text">Scanner pour ouvrir Pézenas<br>dans Google Maps &nbsp;·&nbsp; <a href="https://maps.google.com/?cid=8858847037758294459" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEG 8-9 -->
+  <div class="leg">🚗 <b>Pézenas → Alicante</b> · ≈ 510 km · ≈ 5h15 de route (frontière espagnole)</div>
+
+  <!-- DAY 9 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze mod"><span>9</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">1 jour · Espagne — Costa Blanca</div>
+        <h2>Alicante</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>1555 km</b></div>
+    </div>
+    <div class="card">
+      <div class="card-photo placeholder">📷 Photo bientôt disponible</div>
+      <div class="card-body">
+        <h3 class="rando-name">Halte chez Soraya</h3>
+        <div class="badges">
+          <span class="badge meta">👨‍👩‍👧 Étape famille · 1 nuit</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Ville</div><div class="fact-val">Alicante, Espagne</div></div>
+          <div><div class="fact-lbl">Chez</div><div class="fact-val">Soraya (nièce)</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> pas de rando prévue — étape de repos avant la dernière ligne droite vers l'Andalousie. Adresse exacte à préciser avec Soraya pour affiner le trajet et le lien Maps.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3DAlicante%2C%2BEspagne">
+          <div class="qr-text">Scanner pour ouvrir Alicante<br>dans Google Maps &nbsp;·&nbsp; <a href="https://www.google.com/maps/search/?api=1&query=Alicante%2C+Espagne" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="lodging">🏡 <b>Logement</b> — Chez Soraya, Alicante · <span class="mono">1 nuit</span></div>
+  </div>
+
+  <!-- LEG 9-10 -->
+  <div class="leg">🚗 <b>Alicante → Villanueva de la Concepción</b> · ≈ 440 km · ≈ 4h30 de route</div>
+
+  <!-- DAY 10 -->
+  <div class="day-section">
+    <div class="day-head">
+      <div class="blaze final"><span>10</span></div>
+      <div class="day-titles">
+        <div class="day-eyebrow">Espagne — Andalousie</div>
+        <h2>Villanueva de la Concepción — Arrivée finale</h2>
+      </div>
+      <div class="cumkm">Km cumulés<b>1995 km</b></div>
+    </div>
+    <div class="card">
+      <div class="card-photo placeholder">📷 Photo bientôt disponible</div>
+      <div class="card-body">
+        <h3 class="rando-name">Fin de circuit</h3>
+        <div class="badges">
+          <span class="badge meta">🎉 Étape finale</span>
+        </div>
+        <div class="facts">
+          <div><div class="fact-lbl">Ville</div><div class="fact-val">Villanueva de la Concepción, 29230, Málaga</div></div>
+        </div>
+        <div class="tips">🥪 <b>Conseils :</b> le village est aux portes du Parc naturel d'El Torcal, réputé pour ses formations karstiques spectaculaires — une belle option si l'envie d'une dernière balade se présente une fois installés.</div>
+        <div class="qr-row">
+          <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3DVillanueva%2Bde%2Bla%2BConcepci%25C3%25B3n%2C%2BEspagne">
+          <div class="qr-text">Scanner pour ouvrir Villanueva de la Concepción<br>dans Google Maps &nbsp;·&nbsp; <a href="https://www.google.com/maps/search/?api=1&query=Villanueva+de+la+Concepci%C3%B3n%2C+Espagne" target="_blank">Ouvrir le lien</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Distances routières estimées — à vérifier avant le départ selon l'itinéraire choisi.<br>
+  Adresses exactes à Alicante et Villanueva de la Concepción à préciser.<br>
+  Niveaux de difficulté indicatifs : 🟢 facile · 🔵 modéré · 🔴 difficile.
+</footer>
+
+</body>
+</html>
